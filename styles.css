@@ -1,0 +1,341 @@
+#videoFondo {
+    position: fixed;
+    right: 0;
+    background-size: 100%;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -100;
+    object-fit: cover;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    color: white;
+    font-family: sans-serif;
+}
+
+header {
+    padding: 20px;
+    text-align: center;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    min-height: calc(100vh - 80px);
+    flex-wrap: nowrap;
+    overflow: hidden;
+    perspective: 1200px;
+    padding: 0 50px;
+    box-sizing: border-box
+}
+
+/* Estilos para cada PARTE (columna) */
+.parte1,
+.parte2,
+.parte3 {
+    /* Clave: Permite que las tres columnas se repartan el espacio equitativamente */
+    flex-grow: 1;
+    flex-basis: 0;
+    /* box-sizing: border-box es crucial para que el padding no aumente el ancho total */
+    box-sizing: border-box;
+    padding: 20px;
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
+    /* Añadimos transición para el box-shadow */
+    transform-style: preserve-3d;
+    position: relative;
+    /* Necesario para que el box-shadow se vea bien con la rotación */
+    z-index: 1;
+    min-height: 500px;
+    display: flex;
+    /* Usamos flex para mejor control interno */
+    flex-direction: column;
+    /* Apila el contenido verticalmente */
+}
+
+/* ✅ Rotación para la Columna de Características */
+.parte1 {
+    /* Simula la inclinación y el efecto de perspectiva */
+    transform: rotateY(80deg);
+
+    /* Punto fijo de rotación en el borde derecho */
+}
+
+
+/* ✅ Rotación para la Columna de Estadísticas */
+.parte3 {
+    transform: rotateY(-70deg);
+    transform-origin: left center;
+
+}
+
+/* --- Ajuste de Estadísticas (Asegurar que el texto 79/255 quepa) --- */
+
+.stat-value {
+    width: 50px;
+    /* Aumentado para que quepa "79/255" */
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Corrección de error tipográfico en el HTML original */
+.parte2 {
+    text-align: center;
+    z-index: 10;
+    /* Aseguramos que la parte central esté siempre al frente */
+    min-height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 50px
+}
+.parte1 h2, .parte3 h2 {
+    font-size: 2.2em; /* Un poco más grande para los títulos */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Sombra para que resalte más */
+}
+#img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+.nombre {
+    text-align: center;
+    font-size: 3.5em;
+    margin-bottom: 5px;
+}
+
+.numero {
+    text-align: center;
+    font-size: 1.8em;
+    margin-bottom: 0;
+}
+.parte1 h2, .parte3 h2 {
+    font-size: 1.8em; 
+    margin-bottom: 25px;
+    text-align: left;
+    width: 100%;
+}
+
+#statsContainer {
+    width: 100%;
+    margin-top: 40px;
+}
+.parte1, .parte3 {
+    justify-content: flex-start; /* Alinea el contenido arriba */
+}
+.stat-row {
+    display: flex;
+    align-items: center;
+    /* Alinea verticalmente los elementos de la fila */
+    margin-bottom: 15px;
+    gap: 5px;
+    /* Espacio entre los elementos (nombre, valor, barra) */
+}
+
+.stat-name {
+    width: 70px;
+    font-size: 0.9em;
+    font-weight: bold;
+    text-align: right;
+    color: #CCC;
+    text-transform: uppercase;
+    transition: color 0.5s ease;
+}
+
+.stat-value {
+    width: 55px;
+    font-weight: bold;
+    text-align: center;
+    font-size: 1em
+}
+
+.stat-bar-background {
+    flex-grow: 1;
+    height: 14px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 7px;
+    overflow: hidden;
+}
+
+.stat-bar-fill {
+    height: 100%;
+    background-color: #61d361;
+    transition: width 0.7s ease-out;
+}
+.text-type-fire { color: #F08030 !important; }
+.text-type-water { color: #6890F0 !important; }
+.bar-type-fire { background-color: #F08030 !important; }
+.bar-type-water { background-color: #6890F0 !important; }
+
+.ability-tag,
+.type-tag {
+    display: inline-block;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin-right: 8px;
+    margin-top: 5px;
+    font-size: 0.9em;
+    font-weight: bold;
+    text-transform: capitalize;
+    background-color: #6D6D4E;
+}
+
+
+.type-normal {
+    background-color: #A8A878;
+}
+
+.type-fire {
+    background-color: #F08030;
+}
+
+.type-water {
+    background-color: #6890F0;
+}
+
+.type-grass {
+    background-color: #78C850;
+}
+
+.type-electric {
+    background-color: #F8D030;
+}
+
+.type-ice {
+    background-color: #98D8D8;
+}
+
+.type-fighting {
+    background-color: #C03028;
+}
+
+.type-poison {
+    background-color: #A040A0;
+}
+
+.type-ground {
+    background-color: #E0C068;
+}
+
+.type-flying {
+    background-color: #A890F0;
+}
+
+.type-psychic {
+    background-color: #F85888;
+}
+
+.type-bug {
+    background-color: #A8B820;
+}
+
+.type-rock {
+    background-color: #B8A038;
+}
+
+.type-ghost {
+    background-color: #705898;
+}
+
+.type-dragon {
+    background-color: #7038F8;
+}
+
+/* Color clave para Rayquaza/Mega Rayquaza */
+.type-steel {
+    background-color: #B8B8D0;
+}
+
+.type-dark {
+    background-color: #705848;
+}
+
+.type-fairy {
+    background-color: #EE99AC;
+}
+
+/* Para las habilidades puedes usar un color genérico, o uno específico si quieres */
+.ability-tag {
+    background-color: #4CAF50;
+    /* Un verde genérico para habilidades */
+}
+
+#pokemonWeakness {
+    /* Si quieres mantener el mismo formato vertical que Tipos y Habilidades */
+    width: 100%;
+    text-align: left;
+    margin-bottom: 10px;
+}
+
+/* ... (Tu CSS existente) ... */
+
+/* Estilos generales para los textos de características */
+.parte1 p,
+.parte1 div {
+    font-size: 1.1em;
+    margin-bottom: 15px;
+    text-align: left;
+    width: 100%;
+    line-height: 1.5;
+}
+
+/* Estilo para los títulos de sección dentro de parte1 */
+.parte1 h2 {
+    font-size: 1.8em;
+    /* Tamaño para "Características" */
+    margin-bottom: 25px;
+    /* Más espacio debajo del título */
+    text-align: left;
+    width: 100%;
+}
+
+/* Ajustes para los tags dentro de Habilidades, Tipos y Debilidades */
+#pokemonAbilities .ability-tag,
+#pokemonTypes .type-tag,
+#pokemonWeakness .type-tag {
+    /* Mantenemos el display inline-block para que estén en la misma línea */
+    display: inline-block;
+    margin-right: 8px;
+    /* Espacio entre tags */
+    margin-top: 5px;
+    /* Espacio si el texto de la etiqueta es largo */
+    padding: 6px 12px;
+    /* Un poco más de padding para que los tags sean más grandes */
+    font-size: 1em;
+    /* Tamaño de fuente para los tags */
+    vertical-align: middle;
+    /* Ayuda a alinear los tags si están en la misma línea que el texto "Tipo:" */
+}
+
+/* Ajuste específico para el texto "Tipo:", "Habilidades:", "Debilidades:" para que el tag no esté pegado */
+#pokemonAbilities,
+#pokemonTypes,
+#pokemonWeakness {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Ajuste para el texto inicial (Habilidades:, Tipo:, Debilidades:) */
+#pokemonAbilities::first-line,
+#pokemonTypes::first-line,
+#pokemonWeakness::first-line {
+    font-weight: bold;
+    font-size: 1.1em;
+    /* Mismo tamaño que las otras características */
+    color: white;
+    /* Color para el texto inicial */
+}
+
+.parte1 p {
+    font-weight: 500;
+    /* Ligeramente más grueso */
+    color: #E0E0E0;
+    /* Gris claro para el valor */
+}

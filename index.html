@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <video autoplay loop muted playsinline id="videoFondo">
+        <source src="img/fondo.mp4" type="video/mp4">
+    </video>
+    <header>
+        <input id="pok" type="text" placeholder="Escriba el nombre o numero de pokemon">
+        <button onclick="traer()">Buscar</button>
+    </header>
+    <div class="container">
+        <div class="parte1">
+            <h2>Características</h2>
+            <p id="pokemonId">ID: </p>
+            <p id="pokemonHeight">Altura: </p>
+            <p id="pokemonWeight">Peso: </p>
+            <div id="pokemonAbilities">Habilidades: </div>
+            <div id="pokemonTypes">Tipo: </div>
+            <div id="pokemonForms">Formas: </div>
+            <div id="pokemonWeakness">Debilidades: </div>
+        </div>
+        <div class="parte2">
+            <h1 id="nombre" class="nombre"></h1>
+            <h3 id="numero" class="numero"></h3>
+            <img id="img" alt="">
+        </div>
+        <div class="parte3">
+            <h2>Estadísticas Base</h2>
+            <div id="statsContainer">
+            </div>
+
+        </div>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        // Objeto para mapear los nombres de tipo a sus códigos de color
+        const typeColors = {
+            normal: '#A8A878',
+            fire: '#F08030',
+            water: '#6890F0',
+            grass: '#78C850',
+            electric: '#F8D030',
+            ice: '#98D8D8',
+            fighting: '#C03028',
+            poison: '#A040A0',
+            ground: '#E0C068',
+            flying: '#A890F0',
+            psychic: '#F85888',
+            bug: '#A8B820',
+            rock: '#B8A038',
+            ghost: '#705898',
+            dragon: '#7038F8',
+            steel: '#B8B8D0',
+            dark: '#705848',
+            fairy: '#EE99AC'
+        };
+        async function traer() {
+            let pokemon = document.getElementById("pok").value.toLowerCase();
+
+            try {
+                let res = await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemon}`);
+                console.log(res.data);
+                const primaryType = res.data.types[0].type.name;
+                const primaryColor = typeColors[primaryType] || '#6D6D4E'; // Color por defecto si no se encuentra
+
+                let secondaryColor = null;
+                if (res.data.types.length > 1) {
+                    const secondaryType = res.data.types[1].type.name;
+                    secondaryColor = typeColors[secondaryType] || '#6D6D4E';
+                }
+
+                // Aplicar color al Nombre y Numeral del Pokémon
+                const pokemonNameElement = document.getElementById("nombre");
+                const pokemonNumberElement = document.getElementById("numero");
+                pokemonNameElement.style.color = primaryColor;
+                pokemonNumberElement.style.color = primaryColor;
+
+                let headerBackgroundStyle = `background-color: ${primaryColor};`;
+                if (secondaryColor) {
+                    // Si hay un segundo tipo, usa degradado (linear-gradient)
+                    headerBackgroundStyle = `background-image: linear-gradient(to right, ${primaryColor}, ${secondaryColor});`;
+                }
+
+                // 1. Aplicar degradado al fondo del HEADER
+                document.querySelector('header').style.cssText = headerBackgroundStyle + '; opacity: 0.8; transition: all 0.5s ease;';
+
+                // 2. Aplicar degradado al título "Características"
+                // Nota: Usaremos el mismo estilo de degradado, pero le pondremos un fondo semi-transparente
+                document.querySelector('.parte1 h2').style.cssText = headerBackgroundStyle + '; padding: 5px; border-radius: 5px; color: white; transition: all 0.5s ease;';
+
+                // 3. Aplicar degradado al título "Estadísticas Base"
+                document.querySelector('.parte3 h2').style.cssText = headerBackgroundStyle + '; padding: 5px; border-radius: 5px; color: white; transition: all 0.5s ease;';
+                // ----------------------------------------------------
+                // PARTE CENTRAL
+                // ----------------------------------------------------
+                pokemonNameElement.textContent = res.data.name.toUpperCase();
+                pokemonNumberElement.textContent = `#${res.data.id}`;
+                document.getElementById("img").src = res.data.sprites.other["official-artwork"]["front_default"];
+
+                // [ ... CÓDIGO DE PARTE CENTRAL, ID, ALTURA, PESO, HABILIDADES ... ]
+
+                // PARTE CENTRAL
+                document.getElementById("nombre").textContent = res.data.name.toUpperCase();
+                document.getElementById("numero").textContent = `#${res.data.id}`;
+                document.getElementById("img").src = res.data.sprites.other["official-artwork"]["front_default"];
+
+                // PARTE 1: Características (Código anterior que ya funciona)
+                document.getElementById("pokemonId").textContent = `ID: #${res.data.id}`;
+                const heightInMeters = res.data.height / 10;
+                document.getElementById("pokemonHeight").textContent = `Altura: ${heightInMeters.toFixed(1)} m`;
+                const weightInKgs = res.data.weight / 10;
+                document.getElementById("pokemonWeight").textContent = `Peso: ${weightInKgs.toFixed(1)} kg`;
+
+                // Habilidades 
+                const abilitiesDiv = document.getElementById("pokemonAbilities");
+                abilitiesDiv.innerHTML = "Habilidades: ";
+                res.data.abilities.forEach(abilityInfo => {
+                    const abilityName = abilityInfo.ability.name.replace(/-/g, ' ');
+                    const span = document.createElement("span");
+                    span.textContent = abilityName.charAt(0).toUpperCase() + abilityName.slice(1);
+                    span.classList.add("ability-tag");
+                    abilitiesDiv.appendChild(span);
+                });
+
+                // ✅ CÓDIGO DE TIPOS CORREGIDO Y EN SU LUGAR:
+                const typesDiv = document.getElementById("pokemonTypes");
+                typesDiv.innerHTML = "Tipo: "; // Limpiar y poner el texto base
+                res.data.types.forEach(typeInfo => {
+                    const typeName = typeInfo.type.name; // Obtiene el nombre del tipo (ej: 'fire', 'water')
+                    const span = document.createElement("span");
+                    span.textContent = typeName.charAt(0).toUpperCase() + typeName.slice(1);
+
+                    span.classList.add("type-tag");
+                    span.classList.add(`type-${typeName}`); // Crea la clase "type-fire", "type-water", etc.
+
+                    typesDiv.appendChild(span);
+                });
+                // FIN CÓDIGO DE TIPOS CORREGIDO
+
+                // Formas 
+                const formsDiv = document.getElementById("pokemonForms");
+                formsDiv.innerHTML = "Formas: ";
+                formsDiv.innerHTML += `<span>${res.data.species.name.charAt(0).toUpperCase() + res.data.species.name.slice(1)}</span>`;
+
+                // [ ... CÓDIGO DE ESTADÍSTICAS (PARTE 3) ... ]
+                const statsContainer = document.getElementById("statsContainer");
+                statsContainer.innerHTML = ''; // Limpiar
+                const MAX_STAT_VALUE = 255;
+                // ... (Tu código de estadísticas) ...
+                res.data.stats.forEach(statInfo => {
+                    // Simplificación de nombres para la etiqueta
+                    let statName = statInfo.stat.name.replace('special-attack', 'Sp. Atk');
+                    statName = statName.replace('special-defense', 'Sp. Def');
+                    statName = statName.replace('hp', 'HP');
+                    statName = statName.replace('attack', 'Attack');
+                    statName = statName.replace('defense', 'Defense');
+                    statName = statName.replace('speed', 'Speed');
+
+                    const statValue = statInfo.base_stat;
+                    const percentage = (statValue / MAX_STAT_VALUE) * 100;
+                    let barStyle = `background-color: ${primaryColor};`;
+                    if (secondaryColor) {
+                        barStyle = `background-image: linear-gradient(to right, ${primaryColor}, ${secondaryColor});`;
+                    }
+                    // 2. Generación del HTML con la variable barStyle y primaryColor inyectadas
+                    const statHtml = `
+    <div class="stat-row">
+        <span class="stat-name" style="color: ${primaryColor};">${statName.toUpperCase()}</span>
+        <span class="stat-value">${statValue}/${MAX_STAT_VALUE}</span> 
+        <div class="stat-bar-background">
+            <div class="stat-bar-fill" style="width: ${percentage}%; ${barStyle}"></div>
+        </div>
+    </div>
+`;
+                    statsContainer.innerHTML += statHtml;
+                });
+
+                const debilidades = await obtenerDebilidades(res.data.types);
+                const weaknessDiv = document.getElementById("pokemonWeakness");
+                weaknessDiv.innerHTML = "Debilidades: ";
+
+                debilidades.forEach(weaknessName => {
+                    const span = document.createElement("span");
+                    span.textContent = weaknessName.charAt(0).toUpperCase() + weaknessName.slice(1);
+
+                    // Usamos las mismas clases de color que ya definiste
+                    span.classList.add("type-tag");
+                    span.classList.add(`type-${weaknessName}`);
+
+                    weaknessDiv.appendChild(span);
+                });
+
+            } catch (error) {
+                // ... (Tu código de catch) ...
+                console.error("Error al buscar el Pokémon:", error);
+
+                document.getElementById("nombre").textContent = "Pokémon no encontrado";
+                document.getElementById("numero").textContent = "#???";
+                document.getElementById("img").src = "";
+
+                document.getElementById("pokemonId").textContent = "ID: ";
+                document.getElementById("pokemonHeight").textContent = "Altura: ";
+                document.getElementById("pokemonWeight").textContent = "Peso: ";
+
+                document.getElementById("pokemonAbilities").innerHTML = "Habilidades: ";
+                document.getElementById("pokemonTypes").innerHTML = "Tipo: ";
+                document.getElementById("pokemonForms").innerHTML = "Formas: ";
+                document.getElementById("statsContainer").innerHTML = '';
+            }
+        }
+        // ❌ ¡Asegúrate de que no haya código duplicado o suelto aquí!
+
+        async function obtenerDebilidades(tipos) {
+            const debilidadesSet = new Set();
+
+            for (const typeInfo of tipos) {
+                // Hacemos una petición para cada tipo del Pokémon
+                const typeRes = await axios.get(typeInfo.type.url);
+
+                // Accedemos a las relaciones de doble daño
+                const debilidades = typeRes.data.damage_relations.double_damage_from;
+
+                debilidades.forEach(weakness => {
+                    debilidadesSet.add(weakness.name);
+                });
+            }
+            return Array.from(debilidadesSet);
+        }
+
+
+    </script>
+
+</body>
+
+</html>
