@@ -339,3 +339,144 @@ header {
     color: #E0E0E0;
     /* Gris claro para el valor */
 }
+
+/* =========================================================
+   1. RESET PARA ESCRITORIO (> 820px) - NO TOCAR
+   ========================================================= */
+@media (min-width: 821px) {
+    .parte2 {
+        background: transparent !important; 
+        box-shadow: none !important;
+        order: unset !important; 
+    }
+    .parte1, .parte3 {
+        order: unset !important;
+    }
+    .nombre, .numero {
+        color: inherit; 
+    }
+}
+
+/* =========================================================
+   2. RESPONSIVE (TABLET Y MÓVIL) - CORREGIDO
+   ========================================================= */
+@media (max-width: 820px) {
+
+    /* --- AJUSTES GLOBALES --- */
+    #videoFondo { display: none; }
+    
+    body {
+        background-image: url('img/fondo\ 2.png');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        min-height: 100vh;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;       /* Permite múltiples filas */
+        width: 100%;           /* Asegura que el contenedor use toda la pantalla */
+        max-width: 100%;       /* Evita desbordamientos */
+        height: auto;
+        min-height: auto;
+        padding: 20px;         /* Un poco de aire en los bordes */
+        box-sizing: border-box; 
+        gap: 20px;             /* Espacio entre elementos */
+        justify-content: space-between; /* Distribuye el espacio */
+        perspective: none;
+    }
+
+    /* Quitamos transformaciones 3D */
+    .parte1, .parte2, .parte3 {
+        transform: none !important;
+        min-height: auto;
+    }
+
+    /* --- FILA 1: TARJETA POKÉMON (OCUPA 100%) --- */
+    .parte2 {
+        order: 1;
+        width: 100%;
+        flex-basis: 100%; /* Fuerza a ocupar toda la fila */
+        
+        /* Diseño Card */
+        background-color: rgba(255, 255, 255, 0.1); /* Fondo base por si falla JS */
+        border-radius: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .parte2 #img {
+        max-height: 200px;
+        margin: 15px 0;
+        filter: drop-shadow(0 5px 5px rgba(0,0,0,0.2));
+    }
+
+    #nombre, #numero {
+        color: black !important;
+        text-shadow: none;
+        margin: 5px 0;
+    }
+
+    /* --- FILA 2: CARACTERÍSTICAS Y ESTADÍSTICAS --- */
+    .parte1, .parte3 {
+        background: rgba(30, 30, 30, 0.9); /* Fondo oscuro sólido para contraste */
+        border-radius: 15px;
+        padding: 25px;
+        box-sizing: border-box;
+        
+        /* LA SOLUCIÓN MÁGICA ESTÁ AQUÍ: */
+        flex-grow: 1;        /* 1. Obliga a la caja a estirarse para llenar huecos */
+        flex-basis: calc(50% - 20px); /* 2. Base ideal: 50% menos el espacio del gap */
+        width: auto;         /* 3. Deja que flexbox controle el ancho */
+        max-width: 100%;     /* Seguridad */
+    }
+
+    .parte1 { order: 2; }
+    .parte3 { order: 3; }
+
+    .parte1 h2, .parte3 h2 {
+        font-size: 1.5em;
+        text-align: center;
+        margin-top: 0;
+        padding-bottom: 15px;
+        background: transparent !important;
+        width: 100%;
+        border-bottom: 1px solid rgba(255,255,255,0.2); /* Línea separadora sutil */
+    }
+    
+    /* Ajuste para que las barras de stats usen todo el ancho disponible */
+    .stat-row { width: 100%; }
+    #statsContainer { width: 100%; }
+}
+
+/* =========================================================
+   3. BREAKPOINT MÓVIL (DE 540px HACIA ABAJO)
+   Aquí forzamos que pasen a una sola columna
+   ========================================================= */
+@media (max-width: 540px) {
+    
+    /* Al bajar de 540px, forzamos que la base sea el 100% */
+    .parte1, .parte3 {
+        flex-basis: 100%; /* Ocupa todo el ancho */
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .container {
+        padding: 10px; /* Menos padding en pantallas pequeñas */
+        gap: 15px;
+    }
+
+    /* Ajustes de texto móvil */
+    .nombre { font-size: 1.8em; }
+    .parte1 h2, .parte3 h2 { font-size: 1.3em; }
+    
+    /* Tabla de stats compacta */
+    .stat-name { width: 60px; font-size: 0.85em; }
+}
